@@ -48,7 +48,17 @@ class Security(Application):
     
 
 
-
+    def retrieveSecSymbol(self, companyName):
+        #
+        # A function retrieves a client the clients' dictionary based on client_id
+        # raises an exception if client_id deos not exist
+        #
+        if companyName in self.securities :
+            return self.securities[str(companyName)]
+        else :
+            print("company does not exist")
+        
+        
     def queryPrice(self, symbol) :
         #
         # A function querying a security's price from Price Server
@@ -56,6 +66,7 @@ class Security(Application):
         #
         price = self.price_srvr.getLastRecordedPriceBySymbol(symbol.upper())
         return price
+
      
      
     def getCurrentMarketValue(self):
@@ -66,12 +77,16 @@ class Security(Application):
         print("Last recorded price for security %s is %s" %(symbol, sec_price))
         
         
-    
     def checkSecurityBySymbol(self, symbol):
         """Returns true f symbol exists"""
         
         return True if symbol in self.securities else False
     
+    
+    def checkSymbolBySecurity(self, companyName):
+        """Returns true f symbol exists"""
+        
+        return True if companyName in self.securities else False
     
     def getSecurityInfoBySymbol(self, symbol):
         """Returns a dictionary of security details containing "SYMBOL", "NAME", "SECTOR" and "INDUSTRY" """
