@@ -9,8 +9,6 @@ from datetime import datetime
 
 from ui.abstractapp import Application
 
-from server.price import PriceServer
-from server.alphavantage import Alphavantage
 from trades.client import Client
 from trades.position import Position
 

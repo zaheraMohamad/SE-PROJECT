@@ -12,12 +12,10 @@ import bisect
 
 from ui.abstractapp import Application
 from ui.clientmanager import ClientManager
+from ui.Security import Security
 
 from server import price
-from server.price import PriceServer
-from server.alphavantage import Alphavantage
 from server.dataunavailable import DataUnavailableEx
-from server.orderbroker import OrderBroker
 
 from trades.transaction import Transaction, TransactionError
 from trades.order import Order, OrderStatus
@@ -41,19 +39,17 @@ class TradingApplication(Application):
     @staticmethod
     def getInstance():
         if not TradingApplication.instance :
-            TradingApplication.instance = TradingApplication(
-                                                Application.getConfigFileName(), 
+            TradingApplication.instance = TradingApplication( 
                                                 Application.getTransactiosFileName() )
             
         return TradingApplication.instance
     
-    def __init__(self, config_file_name, transactions_file_name):
+    def __init__(self, transactions_file_name):
         '''
         Constructor
         '''
-        self.price_srvr = PriceServer(Alphavantage(config_file_name))
         self.transactions_file_name = transactions_file_name
-        self.broker = OrderBroker.getInstance()
+        self.security = Security.getInstance()
         
         self.transactions = {}
         
@@ -101,7 +97,7 @@ class TradingApplication(Application):
                 
                 
     def sell(self, client, symbol):
-        if self.broker.checkSecurityBySymbol(symbol) and client.hasPosition(symbol) :
+        if self.security.checkSecurityBySymbol(symbol) and client.hasPosition(symbol) :
             try:
                 max_qty = client.getPosition(symbol).getQuantity()
                 print("You can sell a maximum of %d" % max_qty)
@@ -111,11 +107,11 @@ class TradingApplication(Application):
                     sell_order = Order(int(client.getID()), symbol, TransType.SELL, quantity, ask_price)
                     
                     print("You asked to sell %d stocks of %s, which is now trading at %s" % 
-                                    (quantity, symbol, self.queryPrice(symbol))
+                                    (quantity, symbol, self.security.queryPrice(symbol))
                           )
                     response = input("Are you happy to submit your order [y/n]? ")
                     if re.search(r"^[Yy]", response):
-                        transaction = self.broker.executeOrder(sell_order)
+                        transaction = self.security.executeOrder(sell_order)
                         if transaction :
                             transaction.commit()
                             self.transactions[transaction.date] = transaction
@@ -135,18 +131,18 @@ class TradingApplication(Application):
             
                   
     def buy(self, client, symbol):
-        if self.broker.checkSecurityBySymbol(symbol) :
+        if self.security.checkSecurityBySymbol(symbol) :
             try:
                 quantity = int(self._promptForQuantity())
                 ask_price = float(self._promptForPrice())
                 buy_order = Order(int(client.getID()), symbol, TransType.BUY, quantity, ask_price)
                 
                 print("You asked to buy %d stocks of %s, which is now trading at %s" % 
-                                (quantity, symbol, self.queryPrice(symbol))
+                                (quantity, symbol, self.security.queryPrice(symbol))
                       )
                 response = input("Are you happy to submit your order [y/n]? ")
                 if re.search(r"^[Yy]", response):
-                        transaction = self.broker.executeOrder(buy_order)
+                        transaction = self.security.executeOrder(buy_order)
                         if transaction :
                             transaction.commit()
                             self.transactions[transaction.date] = transaction
@@ -162,14 +158,6 @@ class TradingApplication(Application):
         else :
             raise SymbolDoesNotExistError("Cannot find symbol")
     
-    
-    def queryPrice(self, symbol) :
-        #
-        # A function querying a security's price from Price Server
-        # An Data_Unavailable_Ex may be thrown
-        #
-        price = self.price_srvr.getLastRecordedPriceBySymbol(symbol.upper())
-        return price
     
     
     def listAllTransactions(self):
@@ -213,7 +201,7 @@ Date & time of transaction  =>     Transaction Details
 #                 print(transaction)    
     
     def listTransactionsPerSecurity(self, symbol):
-        if not self.broker.checkSecurityBySymbol(symbol):
+        if not self.security.checkSecurityBySymbol(symbol):
             raise SymbolDoesNotExistError("Cannot find symbol")
         
         print("Listing transactions for Security %s" % symbol )
@@ -278,10 +266,7 @@ Date & time of transaction  =>     Transaction Details
     
     def _menu3(self):       #Query price
         
-        symbol = self._promptForSymbol()      
-        sec_price = self.queryPrice(symbol)
-        
-        print("Last recorded price for security %s is %s" %(symbol, sec_price))
+        return self.security.getCurrentMarketValue()
         
     
     def _menu4(self):   #List transactions for a client.
