@@ -321,7 +321,8 @@ Date & time of transaction  =>     Transaction Details
             menu_items = [
                             self._menu0, self._menu1, self._menu2, 
                             self._menu3, self._menu4, self._menu5, 
-                            self._menu6, self._menu7, self._menu8
+                            self._menu6, self._menu7, self._menu8, 
+                            self._menu9
                           ]
             try:
                 choice = self._menu()
