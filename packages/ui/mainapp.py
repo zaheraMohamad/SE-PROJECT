@@ -52,7 +52,6 @@ class MainMenu(Application) :
             Please choose an option: 
             1:    Manage Clients.
             2:    Trading Application
-            3:    Security List
 
             9:    Quit without saving.
             0:    Save and Exit.
@@ -70,8 +69,6 @@ class MainMenu(Application) :
                     self.clientMgr.run()
                 elif choice == 2:
                     self.tradesAppl.run()
-                elif choice == 3:
-                    self.security.listSecurities()
                     
                 elif choice == 0:
                     self.clientMgr.saveClients()

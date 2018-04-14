@@ -313,7 +313,10 @@ Date & time of transaction  =>     Transaction Details
     
     def _menu8(self):       #List all transactions
         self.listAllTransactions()
-                              
+    
+    def _menu9(self):       #List all Securities
+        self.security.listSecurities()
+                                  
     def run(self):
             menu_items = [
                             self._menu0, self._menu1, self._menu2, 
@@ -322,7 +325,7 @@ Date & time of transaction  =>     Transaction Details
                           ]
             try:
                 choice = self._menu()
-                if choice in range(0,9) :
+                if choice in range(0,10) :
                     menu_item = menu_items[choice]
                     menu_item()
                 else :
