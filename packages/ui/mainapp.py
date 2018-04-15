@@ -13,7 +13,8 @@ from ui.tradingappl import TradingApplication
 from trades.client import ClientException
 from trades.PositionException import PositionException
 from server.dataunavailable import DataUnavailableEx
-from ui.security import Security
+from packages.ui.security import Security
+
 
 class ProgArgumentsErr(Exception):
     """
