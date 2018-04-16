@@ -3,12 +3,14 @@ Created on 16 Apr 2018
 
 @author: Zahera
 '''
-from packages.ui.abstractapp import Application
-from packages.server.price import PriceServer
-from packages.server.alphavantage import Alphavantage
-from packages.trades.security import Security
-from packages.trades.transaction import Transaction
-from packages.trades.security import SecurityException
+
+from ui.abstractapp import Application
+
+from server.price import PriceServer
+from server.alphavantage import Alphavantage
+from trades.security import Security
+from trades.transaction import Transaction
+from trades.security import SecurityException
 
 class SecurityManager(Application):
     '''

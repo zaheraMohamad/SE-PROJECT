@@ -5,9 +5,9 @@ Created on 30 Nov 2017
 '''
 from datetime import datetime
 
-from packages.trades.order import Order, OrderStatus, TransType
-from packages.ui.clientmanager import ClientManager
-from packages.trades.position import Position
+from trades.order import Order, OrderStatus, TransType
+from ui.clientmanager import ClientManager
+from trades.position import Position
 
 
 class TransactionError(Exception):
