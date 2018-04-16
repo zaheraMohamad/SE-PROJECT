@@ -14,6 +14,7 @@ import bisect
 from ui.abstractapp import Application
 from ui.clientmanager import ClientManager
 from ui.Security import Security
+from packages.ui.securitymanager import SecurityManager
 
 from server import price
 from server.dataunavailable import DataUnavailableEx
@@ -50,7 +51,8 @@ class TradingApplication(Application):
         Constructor
         '''
         self.transactions_file_name = transactions_file_name
-        self.security = Security.getInstance()
+        ''' self.security = Security.getInstance()'''
+        self.security = SecurityManager.getInstance()
         
         self.transactions = {}
         

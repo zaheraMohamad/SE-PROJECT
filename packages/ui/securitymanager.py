@@ -1,34 +1,29 @@
 '''
-Created on 13 Apr 2018
+Created on 16 Apr 2018
 
 @author: Zahera
 '''
-from ui.abstractapp import Application
-from trades.transaction import Transaction
-from server.price import PriceServer
-from server.alphavantage import Alphavantage
+from packages.ui.abstractapp import Application
+from packages.server.price import PriceServer
+from packages.server.alphavantage import Alphavantage
+from packages.trades.security import Security
+from packages.trades.transaction import Transaction
 
-
-class Security(Application):
+class SecurityManager(Application):
     '''
     classdocs
     '''
-    
-    instance = None
-    symbol , name, sector, industry = ('','','', '') 
-    
+    instance = None    
 
     @staticmethod
     def getInstance():
-        if not Security.instance :
+        if not SecurityManager.instance :
             config_file_name = Application.getConfigFileName()
             stocks_file_name = Application.getCompaniesFileName()
-            Security.instance = Security(config_file_name, stocks_file_name)
-        return Security.instance
-    
-    
-    
-    def __init__(self, config_file_name, stocks_file_name):
+            SecurityManager.instance = SecurityManager(config_file_name, stocks_file_name)
+        return SecurityManager.instance
+
+    def __init__(self,  config_file_name, stocks_file_name):
         '''
         Uses the (tab delimited) stocks file to retrieve securities details
         '''
@@ -38,16 +33,13 @@ class Security(Application):
         self.securities = {}
 
         with open(stocks_file_name, "r") as securities_file :
-            #First read the line containing the header
             securities_file.readline()
             for line in securities_file :
                 line = line.rstrip()
-                symbol, name, sector, industry = line.split("\t")
-                self.securities[symbol] = {"SYMBOL": symbol, "NAME": name, "SECTOR": sector, "INDUSTRY": industry}
-       
+                stocks_symbol, stocks_name, stocks_sector, stocks_industry = line.split("\t")
+                self.securities[stocks_symbol] = {Security(stocks_symbol, stocks_name, stocks_sector, stocks_industry)}
+               
     
-
-
     def retrieveSecSymbol(self, companyName):
         #
         # A function retrieves a client the clients' dictionary based on client_id
@@ -101,47 +93,7 @@ class Security(Application):
           
     def executeOrder(self, order):
         transaction = Transaction(order) 
-        
-        return transaction  
-              
-              
-    ''' getters '''           
-    @staticmethod
-    def getSymbol() :
-        return Security.symbol
-    
-    @staticmethod
-    def getName() :
-        return Security.name
-    
-    @staticmethod
-    def getSector() :
-        return Security.sector
-    
-    @staticmethod
-    def getIndustry() :
-        return Security.industry
-    
-    
-    ''' Setters '''
-    @staticmethod
-    def setSymbol(newSymbol) :
-        Security.symbol = newSymbol
-    
-    @staticmethod
-    def setName(newName) :
-        Security.name = newName 
-           
-    @staticmethod
-    def setSector(newSector) :
-        Security.sector = newSector    
-        
-    @staticmethod
-    def setIndustry(newIndustry) :
-        Security.industry = newIndustry
-                
-                
-    
+        return transaction      
     
 if __name__ == '__main__':
     pass

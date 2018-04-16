@@ -13,7 +13,6 @@ from ui.tradingappl import TradingApplication
 from trades.client import ClientException
 from trades.PositionException import PositionException
 from server.dataunavailable import DataUnavailableEx
-from packages.ui.security import Security
 
 
 class ProgArgumentsErr(Exception):
@@ -46,7 +45,6 @@ class MainMenu(Application) :
             
             self.clientMgr = ClientManager.getInstance()
             self.tradesAppl = TradingApplication.getInstance()
-            self.security = Security.getInstance()
     
     def menu(self):
         print("""System's Main Menu
