@@ -13,6 +13,7 @@ from packages.ui.tradingappl import TradingApplication
 from packages.trades.client import ClientException
 from packages.trades.PositionException import PositionException
 from packages.server.dataunavailable import DataUnavailableEx
+from packages.ui.securitymanager import SecurityManager
 
 
 class ProgArgumentsErr(Exception):
@@ -45,12 +46,14 @@ class MainMenu(Application) :
             
             self.clientMgr = ClientManager.getInstance()
             self.tradesAppl = TradingApplication.getInstance()
+            self.sec = SecurityManager.getInstance()
     
     def menu(self):
         print("""System's Main Menu
             Please choose an option: 
             1:    Manage Clients.
             2:    Trading Application
+            3:    Manage Security
 
             9:    Quit without saving.
             0:    Save and Exit.
@@ -68,6 +71,8 @@ class MainMenu(Application) :
                     self.clientMgr.run()
                 elif choice == 2:
                     self.tradesAppl.run()
+                elif choice == 3:
+                    self.sec.listSecurities()
                     
                 elif choice == 0:
                     self.clientMgr.saveClients()

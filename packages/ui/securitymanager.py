@@ -15,6 +15,7 @@ class SecurityManager(Application):
     classdocs
     '''
     instance = None    
+    symbol , name, sector, industry = (Security.getSymbol(),Security.getName(),Security.getSector(), Security.getIndustry()) 
 
     @staticmethod
     def getInstance():
@@ -34,11 +35,16 @@ class SecurityManager(Application):
         self.securities = {}
 
         with open(stocks_file_name, "r") as securities_file :
+            #First read the line containing the header
             securities_file.readline()
             for line in securities_file :
                 line = line.rstrip()
-                stocks_symbol, stocks_name, stocks_sector, stocks_industry = line.split("\t")
-                self.securities[stocks_symbol] = {Security(stocks_symbol, stocks_name, stocks_sector, stocks_industry)}
+                symbol, name, sector, industry = line.split("\t")
+                self.securities[symbol] = {"SYMBOL": symbol, "NAME": name, "SECTOR": sector, "INDUSTRY": industry}
+       
+    
+                
+               
                
     
     def retrieveSecSymbol(self, companyName):
