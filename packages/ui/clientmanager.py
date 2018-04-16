@@ -7,14 +7,14 @@ import sys
 import re
 from datetime import datetime
 
-from ui.abstractapp import Application
+from packages.ui.abstractapp import Application
 
-from trades.client import Client
-from trades.position import Position
+from packages.trades.client import Client
+from packages.trades.position import Position
 
-from trades.PositionException import PositionException
-from server.dataunavailable import DataUnavailableEx
-from trades.client import ClientException
+from packages.trades.PositionException import PositionException
+from packages.server.dataunavailable import DataUnavailableEx
+from packages.trades.client import ClientException
 
 
 

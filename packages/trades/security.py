@@ -3,7 +3,13 @@ Created on 16 Apr 2018
 
 @author: Zahera
 '''
+__all__ = ["Security", "SecurityException"]
 
+
+class SecurityException (Exception) :
+    """Client Error"""
+    
+    
 class Security:
     '''
     classdocs

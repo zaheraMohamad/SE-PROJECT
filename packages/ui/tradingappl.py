@@ -11,19 +11,18 @@ import datetime
 import bisect
 
 
-from ui.abstractapp import Application
-from ui.clientmanager import ClientManager
-from ui.Security import Security
+from packages.ui.abstractapp import Application
+from packages.ui.clientmanager import ClientManager
 from packages.ui.securitymanager import SecurityManager
 
-from server import price
-from server.dataunavailable import DataUnavailableEx
+from packages.server import price
+from packages.server.dataunavailable import DataUnavailableEx
 
-from trades.transaction import Transaction, TransactionError
-from trades.order import Order, OrderStatus
-from trades.order import TransType
-from trades.PositionException import PositionException
-from trades.client import ClientException
+from packages.trades.transaction import Transaction, TransactionError
+from packages.trades.order import Order, OrderStatus
+from packages.trades.order import TransType
+from packages.trades.PositionException import PositionException
+from packages.trades.client import ClientException
 
 
 class SymbolDoesNotExistError(Exception):
@@ -51,7 +50,6 @@ class TradingApplication(Application):
         Constructor
         '''
         self.transactions_file_name = transactions_file_name
-        ''' self.security = Security.getInstance()'''
         self.security = SecurityManager.getInstance()
         
         self.transactions = {}

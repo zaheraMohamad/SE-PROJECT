@@ -7,12 +7,12 @@ Created on 20 Feb 2018
 import sys
 import re
 
-from ui.abstractapp import Application
-from ui.clientmanager import ClientManager
-from ui.tradingappl import TradingApplication
-from trades.client import ClientException
-from trades.PositionException import PositionException
-from server.dataunavailable import DataUnavailableEx
+from packages.ui.abstractapp import Application
+from packages.ui.clientmanager import ClientManager
+from packages.ui.tradingappl import TradingApplication
+from packages.trades.client import ClientException
+from packages.trades.PositionException import PositionException
+from packages.server.dataunavailable import DataUnavailableEx
 
 
 class ProgArgumentsErr(Exception):

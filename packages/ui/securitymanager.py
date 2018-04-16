@@ -8,6 +8,7 @@ from packages.server.price import PriceServer
 from packages.server.alphavantage import Alphavantage
 from packages.trades.security import Security
 from packages.trades.transaction import Transaction
+from packages.trades.security import SecurityException
 
 class SecurityManager(Application):
     '''
@@ -48,7 +49,7 @@ class SecurityManager(Application):
         if companyName in self.securities :
             return self.securities[str(companyName)]
         else :
-            print("company does not exist")
+            raise SecurityException("company does not exist")
         
         
     def queryPrice(self, symbol) :
