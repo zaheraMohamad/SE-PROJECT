@@ -35,6 +35,7 @@ class SecurityManager(Application):
         self.price_srvr = PriceServer(Alphavantage(config_file_name))        
   
         self.securities = {}
+        self.securytiList = {}
 
         with open(stocks_file_name, "r") as securities_file :
             #First read the line containing the header
@@ -42,10 +43,12 @@ class SecurityManager(Application):
             for line in securities_file :
                 line = line.rstrip()
                 symbol, name, sector, industry = line.split("\t")
-                self.securities[symbol] = {"SYMBOL": symbol, "NAME": name, "SECTOR": sector, "INDUSTRY": industry}
+                self.securytiList[symbol] = {"SYMBOL": symbol, "NAME": name, "SECTOR": sector, "INDUSTRY": industry}
+                
+                sec = Security(symbol, name, sector, industry)
+                self.securities[symbol] = sec
        
     
-                
                
                
     
@@ -96,8 +99,8 @@ class SecurityManager(Application):
     
     
     def listSecurities(self):
-        for securityList in self.securities.values() :
-            print(str(securityList))
+        for secList in self.securytiList.values() :
+            print(str(secList))
           
           
     def executeOrder(self, order):

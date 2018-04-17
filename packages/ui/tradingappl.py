@@ -13,7 +13,6 @@ import bisect
 
 from ui.abstractapp import Application
 from ui.clientmanager import ClientManager
-from ui.securitymanager import SecurityManager
 
 from server import price
 from server.dataunavailable import DataUnavailableEx
@@ -23,6 +22,8 @@ from trades.order import Order, OrderStatus
 from trades.order import TransType
 from trades.PositionException import PositionException
 from trades.client import ClientException
+from trades.security import Security
+from ui.securitymanager import SecurityManager
 
 
 class SymbolDoesNotExistError(Exception):

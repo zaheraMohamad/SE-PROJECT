@@ -13,6 +13,7 @@ from ui.tradingappl import TradingApplication
 from trades.client import ClientException
 from trades.PositionException import PositionException
 from server.dataunavailable import DataUnavailableEx
+from trades.security import Security
 from ui.securitymanager import SecurityManager
 
 
