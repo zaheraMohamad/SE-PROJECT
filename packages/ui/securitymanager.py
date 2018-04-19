@@ -1,7 +1,7 @@
 '''
 Created on 16 Apr 2018
 
-@author: Zahera
+@author: Zahera --
 '''
 
 from ui.abstractapp import Application
