@@ -24,6 +24,7 @@ from trades.PositionException import PositionException
 from trades.client import ClientException
 from trades.security import Security
 from ui.securitymanager import SecurityManager
+from server.orderbroker import OrderBroker
 
 
 class SymbolDoesNotExistError(Exception):
@@ -52,6 +53,7 @@ class TradingApplication(Application):
         '''
         self.transactions_file_name = transactions_file_name
         self.security = SecurityManager.getInstance()
+
         
         self.transactions = {}
         
@@ -113,7 +115,7 @@ class TradingApplication(Application):
                           )
                     response = input("Are you happy to submit your order [y/n]? ")
                     if re.search(r"^[Yy]", response):
-                        transaction = self.security.executeOrder(sell_order)
+                        transaction = OrderBroker().executeOrder(sell_order)
                         if transaction :
                             transaction.commit()
                             self.transactions[transaction.date] = transaction
@@ -144,7 +146,7 @@ class TradingApplication(Application):
                       )
                 response = input("Are you happy to submit your order [y/n]? ")
                 if re.search(r"^[Yy]", response):
-                        transaction = self.security.executeOrder(buy_order)
+                        transaction = OrderBroker().executeOrder(buy_order)
                         if transaction :
                             transaction.commit()
                             self.transactions[transaction.date] = transaction
@@ -268,7 +270,8 @@ Date & time of transaction  =>     Transaction Details
     
     def _menu3(self):       #Query price
         
-        return self.security.getCurrentMarketValue()
+        price = self.security.getCurrentMarketValue()
+        print("Last recorded price for this particular security is %s" %(price))
         
     
     def _menu4(self):   #List transactions for a client.

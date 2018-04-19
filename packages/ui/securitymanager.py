@@ -77,8 +77,9 @@ class SecurityManager(Application):
         
         symbol = self._promptForSymbol()   
         sec_price = self.queryPrice(symbol)
-           
-        print("Last recorded price for security %s is %s" %(symbol, sec_price))
+          
+        return sec_price 
+        '''print("Last recorded price for security %s is %s" %(symbol, sec_price))'''
         
         
     def checkSecurityBySymbol(self, symbol):
@@ -102,10 +103,7 @@ class SecurityManager(Application):
         for secList in self.securytiList.values() :
             print(str(secList))
           
-          
-    def executeOrder(self, order):
-        transaction = Transaction(order) 
-        return transaction      
+              
     
 if __name__ == '__main__':
     pass
