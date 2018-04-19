@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Documents/FinalReport.docx</name>
+			<type>1</type>
+			<location>C:/Users/User/Documents/UOS/Y2/software evolution/group assignment/FinalReport.docx</location>
+		</link>
+	</linkedResources>
 </projectDescription>
