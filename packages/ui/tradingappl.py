@@ -104,19 +104,22 @@ class TradingApplication(Application):
         if self.security.checkSecurityBySymbol(symbol) and client.hasPosition(symbol) :
             try:
                 max_qty = client.getPosition(symbol).getQuantity()
+                #current market value
+                current_value = float(self.security.getCurrentMarketValue(symbol))   
+                     
                 print("You can sell a maximum of %d" % max_qty)
                 quantity = int(self._promptForQuantity())
                 if quantity <= max_qty : 
-                    ask_price = float(self._promptForPrice())
-                    #current market value
-                    current_value = float(self.security.getCurrentMarketValue(symbol))        
-                    sell_order = Order(int(client.getID()), symbol, TransType.SELL, quantity, ask_price)
-                    
                     print("You asked to sell %d stocks of %s, which is now trading at %s" % 
                                     (quantity, symbol, current_value)
                           )
+                    
+                    max_price = quantity * current_value
+                    ask_price = float(self._promptForPrice())
+                    sell_order = Order(int(client.getID()), symbol, TransType.SELL, quantity, ask_price)
+                    
                     #if ask price <= current market value the sell order will be executed
-                    if ask_price <= current_value:
+                    if ask_price <= max_price:
                         response = input("Are you happy to submit your order [y/n]? ")
                         if re.search(r"^[Yy]", response):
                             transaction = OrderBroker().executeOrder(sell_order)  
@@ -131,7 +134,7 @@ class TradingApplication(Application):
                             sell_order.setStatus(OrderStatus.KILLED)         
                     else:
                         #if ask_price > current_valu sell order will be killed
-                        print("Order cannot be executed; your ask price is greater than the current market value.")
+                        print("Order cannot be executed; the maximum sell price for %d security/s is %s" %(quantity,max_price)) 
                         sell_order.setStatus(OrderStatus.KILLED)
                 else:    
                     print("Order cannot be executed; you don't have enough stock")
@@ -147,17 +150,20 @@ class TradingApplication(Application):
         if self.security.checkSecurityBySymbol(symbol) :
             try:
                 quantity = int(self._promptForQuantity())
-                ask_price = float(self._promptForPrice())
-                #current market value
                 current_value = float(self.security.getCurrentMarketValue(symbol))
-                buy_order = Order(int(client.getID()), symbol, TransType.BUY, quantity, ask_price)
-                
                 print("You asked to buy %d stocks of %s, which is now trading at %s" % 
                                 (quantity, symbol,current_value)
                       )
+                min_price = quantity * current_value
+                ask_price = float(self._promptForPrice())
+                #current market value
+               
+                buy_order = Order(int(client.getID()), symbol, TransType.BUY, quantity, ask_price)
+                
+                
                
                 #if ask price >= current market value the buy order will be executed
-                if ask_price >= current_value:
+                if ask_price >= min_price:
                     
                     response = input("Are you happy to submit your order [y/n]? ")
                     if re.search(r"^[Yy]", response):
@@ -172,7 +178,7 @@ class TradingApplication(Application):
                         buy_order.setStatus(OrderStatus.KILLED)
                 else:
                     #if ask_price < current_valu buy order will be killed
-                    print("Order cannot be executed; your ask price is less than the current market value.")
+                    print("Order cannot be executed; the minimum buy price for %d security/s is %s" %(quantity,min_price))
                     buy_order.setStatus(OrderStatus.KILLED)
                      
                 
