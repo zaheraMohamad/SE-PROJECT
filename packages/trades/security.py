@@ -62,6 +62,14 @@ class Security:
     @staticmethod
     def setIndustry(newIndustry) :
         Security.industry = newIndustry
+        
+          
+    def __repr__(self):
+        return str(self.__dict__)
+    
+    def __str__(self):
+        return "%s:%s:%s:%s" % ("SYMBOL= " + self.symbol, "  NAME= " + self.name, "  SECTOR= " + self.sector, "  INDUSTRY= " + self.industry) 
+    
                 
                 
     

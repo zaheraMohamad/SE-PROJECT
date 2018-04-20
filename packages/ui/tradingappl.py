@@ -289,8 +289,9 @@ Date & time of transaction  =>     Transaction Details
   
     
     def _menu3(self):       #Query price
-        
-        return self.security.queryLastRecoSecurityPrice()
+        symbolValue = self._promptForSymbol()
+        price = self.security.getCurrentMarketValue(symbolValue)
+        print("Last recorded price for this particular security is %s" %(price))
         
         
     def _menu4(self):   #List transactions for a client.

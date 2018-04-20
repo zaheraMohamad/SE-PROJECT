@@ -35,7 +35,6 @@ class SecurityManager(Application):
         self.price_srvr = PriceServer(Alphavantage(config_file_name))        
   
         self.securities = {}
-        self.securytiList = {}
 
         with open(stocks_file_name, "r") as securities_file :
             #First read the line containing the header
@@ -43,13 +42,10 @@ class SecurityManager(Application):
             for line in securities_file :
                 line = line.rstrip()
                 symbol, name, sector, industry = line.split("\t")
-                self.securytiList[symbol] = {"SYMBOL": symbol, "NAME": name, "SECTOR": sector, "INDUSTRY": industry}
-                
                 sec = Security(symbol, name, sector, industry)
                 self.securities[symbol] = sec
        
-    
-               
+                
                
     
     def retrieveSecSymbol(self, companyName):
@@ -63,26 +59,11 @@ class SecurityManager(Application):
             raise SecurityException("company does not exist")
         
         
-    def queryPrice(self, symbol) :
-        #
-        # A function querying a security's price from Price Server
-        # An Data_Unavailable_Ex may be thrown
-        #
-        price = self.price_srvr.getLastRecordedPriceBySymbol(symbol.upper())
-        return price
-
      
-     
-    def queryLastRecoSecurityPrice(self):
-        # A function querying a Last recorded price for security
-        symbol = self._promptForSymbol()   
-        sec_price = self.queryPrice(symbol)   
-        print("Last recorded price for security %s is %s" %(symbol, sec_price))
-     
-        
     def getCurrentMarketValue(self,symbol): 
         # A function return current market value
-        current_value = self.queryPrice(symbol)    
+        
+        current_value = self.price_srvr.getLastRecordedPriceBySymbol(symbol.upper())  
         return current_value
        
 
@@ -104,8 +85,9 @@ class SecurityManager(Application):
     
     
     def listSecurities(self):
-        for secList in self.securytiList.values() :
+        for secList in self.securities.values() :
             print(str(secList))
+            
           
               
     
