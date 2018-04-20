@@ -108,52 +108,73 @@ class TradingApplication(Application):
                 quantity = int(self._promptForQuantity())
                 if quantity <= max_qty : 
                     ask_price = float(self._promptForPrice())
+                    #current market value
+                    current_value = float(self.security.getCurrentMarketValue(symbol))        
                     sell_order = Order(int(client.getID()), symbol, TransType.SELL, quantity, ask_price)
                     
                     print("You asked to sell %d stocks of %s, which is now trading at %s" % 
-                                    (quantity, symbol, self.security.queryPrice(symbol))
+                                    (quantity, symbol, current_value)
                           )
-                    response = input("Are you happy to submit your order [y/n]? ")
-                    if re.search(r"^[Yy]", response):
-                        transaction = OrderBroker().executeOrder(sell_order)
-                        if transaction :
-                            transaction.commit()
-                            self.transactions[transaction.date] = transaction
-                        else :
-                            raise TransactionError("Sell order failed")
-                    
+                    #if ask price <= current market value the sell order will be executed
+                    if ask_price <= current_value:
+                        response = input("Are you happy to submit your order [y/n]? ")
+                        if re.search(r"^[Yy]", response):
+                            transaction = OrderBroker().executeOrder(sell_order)  
+                            if transaction :
+                                transaction.commit()
+                                self.transactions[transaction.date] = transaction
+                            else:
+                                raise TransactionError("Sell order failed")
+                        
+                        else:
+                            #if response="no"
+                            sell_order.setStatus(OrderStatus.KILLED)         
                     else:
+                        #if ask_price > current_valu sell order will be killed
+                        print("Order cannot be executed; your ask price is greater than the current market value.")
                         sell_order.setStatus(OrderStatus.KILLED)
-                else :
+                else:    
                     print("Order cannot be executed; you don't have enough stock")
                     return
             
             except TypeError as ex :
                 print ("Exception: %s " %ex, file = sys.stderr)
+                
         else :
-            raise PositionException("You do not hold position on this symbol")
-            
+            raise SymbolDoesNotExistError("Cannot find symbol") 
                   
     def buy(self, client, symbol):
         if self.security.checkSecurityBySymbol(symbol) :
             try:
                 quantity = int(self._promptForQuantity())
                 ask_price = float(self._promptForPrice())
+                #current market value
+                current_value = float(self.security.getCurrentMarketValue(symbol))
                 buy_order = Order(int(client.getID()), symbol, TransType.BUY, quantity, ask_price)
                 
                 print("You asked to buy %d stocks of %s, which is now trading at %s" % 
-                                (quantity, symbol, self.security.queryPrice(symbol))
+                                (quantity, symbol,current_value)
                       )
-                response = input("Are you happy to submit your order [y/n]? ")
-                if re.search(r"^[Yy]", response):
+               
+                #if ask price >= current market value the buy order will be executed
+                if ask_price >= current_value:
+                    
+                    response = input("Are you happy to submit your order [y/n]? ")
+                    if re.search(r"^[Yy]", response):
                         transaction = OrderBroker().executeOrder(buy_order)
                         if transaction :
                             transaction.commit()
                             self.transactions[transaction.date] = transaction
                         else :
                             raise TransactionError("Buy order failed")
-                else :
+                    else :
+                        #if response="no"
+                        buy_order.setStatus(OrderStatus.KILLED)
+                else:
+                    #if ask_price < current_valu buy order will be killed
+                    print("Order cannot be executed; your ask price is less than the current market value.")
                     buy_order.setStatus(OrderStatus.KILLED)
+                     
                 
             except TypeError as ex :
                 print ("Exception: %s " %ex, file = sys.stderr)
@@ -161,7 +182,6 @@ class TradingApplication(Application):
         
         else :
             raise SymbolDoesNotExistError("Cannot find symbol")
-    
     
     
     def listAllTransactions(self):
@@ -270,10 +290,9 @@ Date & time of transaction  =>     Transaction Details
     
     def _menu3(self):       #Query price
         
-        price = self.security.getCurrentMarketValue()
-        print("Last recorded price for this particular security is %s" %(price))
+        return self.security.queryLastRecoSecurityPrice()
         
-    
+        
     def _menu4(self):   #List transactions for a client.
         try:
             client_id = self._promptForID()

@@ -73,15 +73,19 @@ class SecurityManager(Application):
 
      
      
-    def getCurrentMarketValue(self):
-        
+    def queryLastRecoSecurityPrice(self):
+        # A function querying a Last recorded price for security
         symbol = self._promptForSymbol()   
-        sec_price = self.queryPrice(symbol)
-          
-        return sec_price 
-        '''print("Last recorded price for security %s is %s" %(symbol, sec_price))'''
+        sec_price = self.queryPrice(symbol)   
+        print("Last recorded price for security %s is %s" %(symbol, sec_price))
+     
         
-        
+    def getCurrentMarketValue(self,symbol): 
+        # A function return current market value
+        current_value = self.queryPrice(symbol)    
+        return current_value
+       
+
     def checkSecurityBySymbol(self, symbol):
         """Returns true f symbol exists"""
         
