@@ -109,13 +109,15 @@ class TradingApplication(Application):
                      
                 print("You can sell a maximum of %d" % max_qty)
                 quantity = int(self._promptForQuantity())
+                max_price = quantity * current_value
                 if quantity <= max_qty : 
-                    print("You asked to sell %d stocks of %s, which is now trading at %s" % 
-                                    (quantity, symbol, current_value)
+                    print("You asked to sell %d stocks of %s, which is now trading at %s, maximum price is %s" % 
+                                    (quantity, symbol, current_value, max_price)
                           )
                     
-                    max_price = quantity * current_value
                     ask_price = float(self._promptForPrice())
+                    
+                        
                     sell_order = Order(int(client.getID()), symbol, TransType.SELL, quantity, ask_price)
                     
                     #if ask price <= current market value the sell order will be executed
@@ -151,10 +153,10 @@ class TradingApplication(Application):
             try:
                 quantity = int(self._promptForQuantity())
                 current_value = float(self.security.getCurrentMarketValue(symbol))
-                print("You asked to buy %d stocks of %s, which is now trading at %s" % 
-                                (quantity, symbol,current_value)
-                      )
                 min_price = quantity * current_value
+                print("You asked to buy %d stocks of %s, which is now trading at %s, minimum price will be %s" % 
+                                (quantity, symbol,current_value, min_price)
+                      )
                 ask_price = float(self._promptForPrice())
                 #current market value
                
