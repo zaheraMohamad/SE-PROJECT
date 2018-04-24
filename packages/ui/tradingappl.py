@@ -29,6 +29,8 @@ from server.orderbroker import OrderBroker
 
 import pandas as pd
 from pandas import DataFrame
+from pandas.io.sas.sas_constants import index
+from numpy.lib.index_tricks import index_exp
 
 
 
@@ -213,11 +215,13 @@ Date & time of transaction  =>     Transaction Details
         if not re.search(r"^[Yy]", response):
             return
         
+     
+        clientTransSet= pd.read_csv(self.transactions_file_name,delimiter="|", header=None,names=["Date-Time","ID","Type","Symbol","Price","Quantity"])
+        self.id = clientTransSet['ID'] == client.getID()
         
-        
-        clientTransSet= pd.read_csv(self.transactions_file_name,delimiter="|",header=None,names=["Date-Time","ID","Type","Symbol","Price","Quantity"])
-        print(clientTransSet)
-          
+        print(clientTransSet[self.id])
+       
+
             
     
     #Lists all transactions between two dates (inclusive); 
