@@ -27,6 +27,13 @@ from ui.securitymanager import SecurityManager
 from server.orderbroker import OrderBroker
 
 
+import pandas as pd
+from pandas import DataFrame
+
+
+
+
+
 class SymbolDoesNotExistError(Exception):
     """
         Symbol not listed in stock exchange
@@ -206,10 +213,12 @@ Date & time of transaction  =>     Transaction Details
         if not re.search(r"^[Yy]", response):
             return
         
-        for transaction in self.transactions.values() :
-            if transaction.get_client_id() == client.getID() :
-                print(transaction)
-
+        
+        
+        clientTransSet= pd.read_csv(self.transactions_file_name,delimiter="|",header=None,names=["Date-Time","ID","Type","Symbol","Price","Quantity"])
+        print(clientTransSet)
+          
+            
     
     #Lists all transactions between two dates (inclusive); 
     #pass two dates of equal value to list transactions on a particular date

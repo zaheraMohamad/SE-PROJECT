@@ -7,6 +7,7 @@ Created on 20 Feb 2018
 import sys
 import re
 
+
 from ui.abstractapp import Application
 from ui.clientmanager import ClientManager
 from ui.tradingappl import TradingApplication

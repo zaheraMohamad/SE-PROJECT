@@ -15,7 +15,7 @@ from trades.position import Position
 from trades.PositionException import PositionException
 from server.dataunavailable import DataUnavailableEx
 from trades.client import ClientException
-
+import pandas as pd
 
 
 class ClientManager(Application):
@@ -87,8 +87,9 @@ class ClientManager(Application):
             raise ClientException ("Client cannot be created; invalid email address")
 
     def listClients(self):
-        for client in self.clients.values() :
-            print(str(client))
+        clientDataset= pd.read_csv(self.clients_file_name,delimiter=":")
+        print(clientDataset)
+        
             
     def saveClients(self):
         with open(self.clients_file_name, "w") as clients_file :
