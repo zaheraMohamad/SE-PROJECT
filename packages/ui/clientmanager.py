@@ -17,6 +17,7 @@ from server.dataunavailable import DataUnavailableEx
 from trades.client import ClientException
 import pandas as pd
 from unittest.mock import inplace
+from pandas.tests.io.parser import skiprows
 
 
 
@@ -91,7 +92,7 @@ class ClientManager(Application):
     def listClients(self):
         #represent of data frames stretch across page
         pd.set_option('expand_frame_repr',False)
-        clientDataset= pd.read_csv(self.clients_file_name,delimiter=":",header=None,
+        clientDataset= pd.read_csv(self.clients_file_name,skiprows=1,delimiter=":",header=None,
                     names=["ID","Name","Email","Symbol"],index_col="ID",na_filter=False)
         print(clientDataset)
        
