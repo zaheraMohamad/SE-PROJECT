@@ -16,6 +16,8 @@ from trades.PositionException import PositionException
 from server.dataunavailable import DataUnavailableEx
 from trades.client import ClientException
 import pandas as pd
+from unittest.mock import inplace
+
 
 
 class ClientManager(Application):
@@ -87,8 +89,13 @@ class ClientManager(Application):
             raise ClientException ("Client cannot be created; invalid email address")
 
     def listClients(self):
-        clientDataset= pd.read_csv(self.clients_file_name,delimiter=":")
+        #represent of data frames stretch across page
+        pd.set_option('expand_frame_repr',False)
+        clientDataset= pd.read_csv(self.clients_file_name,delimiter=":",header=None,
+                    names=["ID","Name","Email","Symbol"],index_col="ID",na_filter=False)
         print(clientDataset)
+       
+        
         
             
     def saveClients(self):

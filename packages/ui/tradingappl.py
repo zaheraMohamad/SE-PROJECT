@@ -28,12 +28,7 @@ from server.orderbroker import OrderBroker
 
 
 import pandas as pd
-from pandas import DataFrame
-from pandas.io.sas.sas_constants import index
-from numpy.lib.index_tricks import index_exp
-
-
-
+import numpy as np
 
 
 class SymbolDoesNotExistError(Exception):
@@ -216,13 +211,12 @@ Date & time of transaction  =>     Transaction Details
             return
         
      
-        clientTransSet= pd.read_csv(self.transactions_file_name,delimiter="|", header=None,names=["Date-Time","ID","Type","Symbol","Price","Quantity"])
-        self.id = clientTransSet['ID'] == client.getID()
+        clientTransSet= pd.read_csv(self.transactions_file_name,delimiter="|", header=None,
+                    names=["Date_Time","ID","Type","Symbol","Price","Quantity"],index_col="Date_Time")
         
-        print(clientTransSet[self.id])
-       
-
-            
+        select_data=clientTransSet.loc[clientTransSet.ID == client.getID(),:]
+        print(select_data)
+        
     
     #Lists all transactions between two dates (inclusive); 
     #pass two dates of equal value to list transactions on a particular date
@@ -231,8 +225,18 @@ Date & time of transaction  =>     Transaction Details
             trns_in_dates = self._transactions_between(from_date, to_date)
             
             if trns_in_dates :
-                for  transaction in trns_in_dates :
-                    print(transaction)
+                transArray= np.array(trns_in_dates)
+                pd.set_option('expand_frame_repr',False)
+                trans =pd.DataFrame([transArray], columns=["Date_Time","ID","Type","Symbol","Price","Quantity","k"])
+                print(trans)#2018-02-22
+                
+                # transSet= pd.read_csv(self.transactions_file_name,delimiter="|", header=None,
+                #    names=["Date","ID","Type","Symbol","Price","Quantity"],index_col="Date")
+                
+                #select_data=transSet.loc[transSet.Date in trns_in_dates,:]
+                #print(select_data)
+               
+                
             else :
                 print("No transaction found on this period!")
         except Exception as ex:
