@@ -92,8 +92,13 @@ class ClientManager(Application):
     def listClients(self):
         #represent of data frames stretch across page
         pd.set_option('expand_frame_repr',False)
+        pd.set_option('max_colwidth',10000)
+        
         clientDataset= pd.read_csv(self.clients_file_name,skiprows=1,delimiter=":",header=None,
-                    names=["ID","Name","Email","Symbol"],index_col="ID",na_filter=False)
+                    names=["ID","Name","Email","Transaction Details"],index_col="ID",na_filter=False)
+        print("""
+                      Client Details
+===========================   ========================================================================""")
         print(clientDataset)
        
         

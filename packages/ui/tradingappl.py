@@ -28,7 +28,7 @@ from server.orderbroker import OrderBroker
 
 
 import pandas as pd
-import numpy as np
+
 
 
 class SymbolDoesNotExistError(Exception):
@@ -199,9 +199,11 @@ class TradingApplication(Application):
     def listAllTransactions(self):
         print("""
 Date & time of transaction  =>     Transaction Details
-===========================   =============================""")
+===========================   ============================================================""")
         for date, transaction in self.transactions.items() :
             print(date, " => ", transaction)
+            print("""
+===========================   ============================================================""")
     
     
     def listTransactionsPerClient(self, client):
@@ -210,13 +212,17 @@ Date & time of transaction  =>     Transaction Details
         if not re.search(r"^[Yy]", response):
             return
         
-     
         clientTransSet= pd.read_csv(self.transactions_file_name,delimiter="|", header=None,
                     names=["Date_Time","ID","Type","Symbol","Price","Quantity"],index_col="Date_Time")
         
         select_data=clientTransSet.loc[clientTransSet.ID == client.getID(),:]
+        print("""
+ Date & time of transaction  =>      Transaction Details
+===========================   ========================================""")
         print(select_data)
-        
+        print("""
+===========================   ========================================""")
+     
     
     #Lists all transactions between two dates (inclusive); 
     #pass two dates of equal value to list transactions on a particular date
@@ -225,17 +231,18 @@ Date & time of transaction  =>     Transaction Details
             trns_in_dates = self._transactions_between(from_date, to_date)
             
             if trns_in_dates :
-                transArray= np.array(trns_in_dates)
-                pd.set_option('expand_frame_repr',False)
-                trans =pd.DataFrame([transArray], columns=["Date_Time","ID","Type","Symbol","Price","Quantity","k"])
-                print(trans)#2018-02-22
-                
-                # transSet= pd.read_csv(self.transactions_file_name,delimiter="|", header=None,
-                #    names=["Date","ID","Type","Symbol","Price","Quantity"],index_col="Date")
-                
-                #select_data=transSet.loc[transSet.Date in trns_in_dates,:]
-                #print(select_data)
-               
+                print("""
+Date & time of transaction  =>     Transaction Details
+===========================   ========================================""")
+                 
+                for transaction in trns_in_dates :
+                   
+                    print(transaction)   
+                    
+                    
+                    print("""
+===========================   ========================================""")
+     
                 
             else :
                 print("No transaction found on this period!")
@@ -254,9 +261,18 @@ Date & time of transaction  =>     Transaction Details
             raise SymbolDoesNotExistError("Cannot find symbol")
         
         print("Listing transactions for Security %s" % symbol )
+        
+        print("""
+Date & time of transaction  =>     Transaction Details
+===========================   ========================================""")
+                 
+
         for transaction in self.transactions.values() :
             if transaction.get_symbol() == symbol :
                 print(transaction)
+                print("""
+===========================   ========================================""")
+     
     
     def _menu(self):
         print("""Client's Manager Menu

@@ -108,7 +108,7 @@ class Transaction:
         return str(self.__dict__)
     
     def __str__(self):        
-        return "%s|%d|%d|%s|%.4f|%d" % (self.date, self.clientID, self.trans_type, self.symbol, self.price, self.quantity) 
+        return "%s|%5d|%5d|%-5s|%.2f|%5d" % (self.date, self.clientID, self.trans_type, self.symbol, self.price, self.quantity) 
     
     #===========================================================================
     # Properties definition
