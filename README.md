@@ -24,8 +24,10 @@ date_and_time|client_id|trans_type|symbol|ask_price|quantity
 Below	is	an	example:	
 2018-02-22 22:41:46.243791|1|1|GOOG |1100.0000|201
 
-4-Companies file: comanylist.txt this	file	contains	a	tab	separated	information	about	the	companies	enlisted	on	the	NASDAQ	stock	market.	The	first	line	of	the	file	contains	header	information.Example:	
+4-Companies file: comanylist.txt this file contains a tab separated information abou the companies enlisted on	the NASDAQ stock market.
+The first line of the file	contains header	information.Example:	
 Symbol	Name	Sector	industry
+
 -Install pip using the commaned line:
 Python -m pip install reQuests
  -Instal Pandas using the commaned line:
