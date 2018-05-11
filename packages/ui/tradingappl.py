@@ -73,7 +73,6 @@ class TradingApplication(Application):
                 transaction.symbol = symbol
                 transaction.price = float(price)
                 transaction.quantity = int(qty)
-                
                 self.transactions[transaction.date] = transaction
     
               
@@ -270,6 +269,7 @@ Date & time of transaction  =>     Transaction Details
         for transaction in self.transactions.values() :
             if transaction.get_symbol() == symbol :
                 print(transaction)
+        
                 print("""
 ===========================   ========================================""")
      

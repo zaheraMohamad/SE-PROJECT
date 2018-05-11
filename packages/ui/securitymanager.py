@@ -88,9 +88,8 @@ class SecurityManager(Application):
         for secList in self.securities.values() :
             print(str(secList))
             
-          
-              
-    
+   
+  
 if __name__ == '__main__':
     pass
         

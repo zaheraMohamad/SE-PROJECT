@@ -50,7 +50,6 @@ class Order:
     def getSymbol(self):
         return self.__symbol
 
-
     def getTrans_type(self):
         return self.__trans_type
 

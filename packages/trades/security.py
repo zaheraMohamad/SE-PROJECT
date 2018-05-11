@@ -36,7 +36,8 @@ class Security:
     @staticmethod
     def getName() :
         return Security.name
-    
+          
+   
     @staticmethod
     def getSector() :
         return Security.sector
